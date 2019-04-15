@@ -1,0 +1,20 @@
+body {
+  background-color: #6bff8c;
+  font-family: "Arial";
+  text-align: center;
+}
+#question {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20vh;
+  font-size: 150%;
+}
+#choices {
+  height: 74vh;
+}
+#choices button {
+  height: 100%;
+  width: 49%;
+  font-size: 150%;
+}
