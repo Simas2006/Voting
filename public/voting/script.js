@@ -1,3 +1,5 @@
+var socket;
+
 function renderItems(obj) {
   document.getElementById("question").innerText = obj.question;
   var width = Math.floor(100 / obj.choices.length);
@@ -13,18 +15,17 @@ function renderItems(obj) {
   }
 }
 
-window.onload = function() {
-  renderItems({
-    "question": "Question",
-    "choices": [
-      "Yes",
-      "No",
-      "Choice #3",
-      "Choice #4",
-      "Choice #5"
-    ]
+function setupSocket() {
+  socket = io("/voter");
+  socket.on("connect",function() {
+    console.log("Connection successful");
   });
+  socket.on("poll-post",renderItems);
+}
+
+window.onload = function() {
   if ( ! localStorage.getItem("uid") ) {
     localStorage.setItem("uid",Math.floor(Math.random() * 1e14));
   }
+  setupSocket();
 }
