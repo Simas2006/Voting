@@ -10,6 +10,10 @@ function renderItems(obj) {
   for ( var i = 0; i < obj.choices.length; i++ ) {
     var button = document.createElement("button");
     button.innerText = obj.choices[i];
+    button["data-index"] = i;
+    button.onclick = function() {
+      socket.emit("vote",parseInt(this["data-index"]));
+    }
     button.style.width = width + "%";
     div.appendChild(button);
   }
@@ -21,6 +25,12 @@ function setupSocket() {
     console.log("Connection successful");
   });
   socket.on("poll-post",renderItems);
+  socket.on("single-lock",function() {
+    var buttons = document.getElementById("choices").childNodes;
+    for ( var i = 0; i < buttons.length; i++ ) {
+      buttons[i].disabled = "disabled";
+    }
+  });
 }
 
 window.onload = function() {

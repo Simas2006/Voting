@@ -16,4 +16,6 @@ body {
 #choices button {
   height: 100%;
   font-size: 150%;
+  background-color: #f0f0f0;
+  color: black;
 }

@@ -18,9 +18,17 @@ var currentPoll = {
 app.use("/public",express.static(__dirname + "/public"));
 
 voterRoom.on("connection",function(socket) {
+  var singleLock = false;
   socket.emit("poll-post",{
-    "questions": currentPoll.questions,
+    "question": currentPoll.question,
     "choices": currentPoll.choices
+  });
+  socket.on("vote",function(choice) {
+    if ( ! choice instanceof Number ) return;
+    currentPoll.votes[choice]++;
+    console.log(currentPoll.votes,choice);
+    singleLock = true;
+    socket.emit("single-lock");
   });
 });
 
