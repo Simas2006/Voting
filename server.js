@@ -2,7 +2,7 @@ var express = require("express");
 var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
-var PORT = process.argv[2] | 8000;
+var PORT = process.argv[2] || 8000;
 
 var voterRoom = io.of("/voter");
 var adminRoom = io.of("/admin");

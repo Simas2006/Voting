@@ -17,8 +17,8 @@
     <td>
       <input type="text" id="question" placeholder="Question" />
       <ul id="choices">
-        <li>
-          <button class="add">Add +</button>
+        <li id="add-button">
+          <button class="add" onclick="addChoice()">Add +</button>
         </li>
       </ul>
       <div id="control-panel">
@@ -27,7 +27,7 @@
         <button onclick="clearPoll()">Clear</button>
       </div>
     </td>
-    <td>
+    <td id="bar-chart">
       Bar Chart
     </td>
   </tr></table>

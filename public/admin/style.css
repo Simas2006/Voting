@@ -12,6 +12,9 @@ body {
   border-right: 1px solid black;
   border-bottom: 1px solid black;
 }
+#main-table {
+  border-bottom: 1px solid black;
+}
 #main-table td {
   width: 50vw;
 }
@@ -20,11 +23,13 @@ body {
   width: 100%;
 }
 #choices {
+  vertical-align: top;
   text-align: left;
 }
 #choices input {
   font-size: 100%;
   width: 50%;
+  margin-right: 10px;
 }
 #choices button {
   font-size: 100%;
@@ -40,4 +45,7 @@ body {
   width: 32%;
   height: 2em;
   margin: 0;
+}
+#bar-chart {
+  height: 90vh;
 }
