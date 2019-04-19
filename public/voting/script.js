@@ -1,4 +1,5 @@
 var socket;
+var singleLock = false;
 
 function renderItems(obj) {
   document.getElementById("question").innerText = obj.question;
@@ -12,6 +13,8 @@ function renderItems(obj) {
     button.innerText = obj.choices[i];
     button["data-index"] = i;
     button.onclick = function() {
+      if ( singleLock ) return;
+      singleLock = true;
       socket.emit("vote",parseInt(this["data-index"]));
     }
     button.style.width = width + "%";
@@ -26,10 +29,12 @@ function setupSocket() {
   });
   socket.on("poll-post",renderItems);
   socket.on("single-lock",function() {
-    var buttons = document.getElementById("choices").childNodes;
-    for ( var i = 0; i < buttons.length; i++ ) {
-      buttons[i].disabled = "disabled";
-    }
+    setTimeout(function() {
+      var buttons = document.getElementById("choices").childNodes;
+      for ( var i = 0; i < buttons.length; i++ ) {
+        buttons[i].disabled = "disabled";
+      }
+    },50);
   });
 }
 
