@@ -29,6 +29,7 @@ adminRoom.on("connection",function(socket) {
       "question": currentPoll.question,
       "choices": currentPoll.choices
     });
+    socket.emit("confirm-post");
   });
 });
 

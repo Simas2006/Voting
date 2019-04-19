@@ -33,10 +33,15 @@ function setupSocket() {
   socket.on("connect",function() {
     console.log("Connection successful");
   });
+  socket.on("confirm-post",function() {
+    console.log("Post confirmed");
+  });
 }
 
 window.onload = function() {
   setupSocket();
   addChoice();
   addChoice();
+  document.getElementById("choices").children[0].firstChild.value = "Yes";
+  document.getElementById("choices").children[1].firstChild.value = "No";
 }
