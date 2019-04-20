@@ -1,5 +1,5 @@
 var socket;
-var singleLock = false;
+var tempLock = false;
 
 function renderItems(obj) {
   document.getElementById("question").innerText = obj.question;
@@ -13,8 +13,8 @@ function renderItems(obj) {
     button.innerText = obj.choices[i];
     button["data-index"] = i;
     button.onclick = function() {
-      if ( singleLock ) return;
-      singleLock = true;
+      if ( tempLock ) return;
+      tempLock = true;
       socket.emit("vote",parseInt(this["data-index"]));
     }
     button.style.width = width + "%";
@@ -39,8 +39,5 @@ function setupSocket() {
 }
 
 window.onload = function() {
-  if ( ! localStorage.getItem("uid") ) {
-    localStorage.setItem("uid",Math.floor(Math.random() * 1e14));
-  }
   setupSocket();
 }

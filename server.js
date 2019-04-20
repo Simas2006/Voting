@@ -15,13 +15,14 @@ voterRoom.on("connection",function(socket) {
   socket.on("vote",function(choice) {
     if ( ! choice instanceof Number ) return;
     currentPoll.votes[choice]++;
-    console.log(currentPoll.votes,choice);
     singleLock = true;
     socket.emit("single-lock");
+    adminRoom.emit("recalculate-votes",currentPoll);
   });
 });
 
 adminRoom.on("connection",function(socket) {
+  if ( currentPoll ) adminRoom.emit("recalculate-votes",currentPoll);
   socket.on("poll-post",function(obj) {
     currentPoll = obj;
     currentPoll.votes = obj.choices.map(item => 0);
@@ -29,7 +30,7 @@ adminRoom.on("connection",function(socket) {
       "question": currentPoll.question,
       "choices": currentPoll.choices
     });
-    socket.emit("confirm-post");
+    adminRoom.emit("recalculate-votes",currentPoll);
   });
 });
 
