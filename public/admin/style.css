@@ -12,9 +12,6 @@ body {
   border-right: 1px solid black;
   border-bottom: 1px solid black;
 }
-#main-table {
-  border-bottom: 1px solid black;
-}
 #main-table td {
   width: 50vw;
 }
@@ -46,6 +43,29 @@ body {
   height: 2em;
   margin: 0;
 }
-#bar-chart {
+#chart-panel {
+  display: flex;
+  flex-flow: column;
   height: 90vh;
+}
+#bar-chart {
+  height: 100%;
+  flex-grow: 1;
+}
+#bar-chart tr:first-child {
+  height: 2em;
+}
+#bar-chart tr:last-child {
+  flex-grow: 1;
+  vertical-align: bottom;
+}
+#bar-chart tr:last-child td {
+  border-top: 3px solid gray;
+  border-bottom: 3px solid gray;
+}
+.chart-column {
+  width: 78%;
+  height: 0;
+  background-color: red;
+  margin: auto;
 }

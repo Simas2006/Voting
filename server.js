@@ -30,7 +30,7 @@ adminRoom.on("connection",function(socket) {
       "question": currentPoll.question,
       "choices": currentPoll.choices
     });
-    adminRoom.emit("recalculate-votes",currentPoll);
+    adminRoom.emit("poll-post",currentPoll);
   });
 });
 

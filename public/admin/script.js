@@ -33,8 +33,8 @@ function setupSocket() {
   socket.on("connect",function() {
     console.log("Connection successful");
   });
-  socket.on("recalculate-votes",function(obj) {
-    document.getElementById("poll-info").innerText = `Question: ${obj.question}\nChoices: ${obj.choices.join(", ")}`;
+  socket.on("poll-post",function(obj) {
+    document.getElementById("poll-info").innerText = `Question: ${obj.question}`;
   });
 }
 
