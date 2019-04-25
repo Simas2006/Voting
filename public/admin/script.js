@@ -1,4 +1,5 @@
 var socket;
+var totalCount = 12;
 
 function addChoice() {
   var li = document.createElement("li");
@@ -35,6 +36,25 @@ function setupSocket() {
   });
   socket.on("poll-post",function(obj) {
     document.getElementById("poll-info").innerText = `Question: ${obj.question}`;
+    var choices = document.getElementById("chart-choices");
+    var bars = document.getElementById("chart-bars");
+    while ( choices.firstChild ) {
+      choices.removeChild(choices.firstChild);
+    }
+    while ( bars.firstChild ) {
+      bars.removeChild(bars.firstChild);
+    }
+    for ( var i = 0; i < obj.choices.length; i++ ) {
+      var text = document.createElement("td");
+      text.innerText = obj.choices[i];
+      choices.appendChild(text);
+      var container = document.createElement("td");
+      var div = document.createElement("div");
+      div.className = "chart-column";
+      div.style.height = (obj.votes[i] / totalCount) * 100 + "%";
+      container.appendChild(div);
+      bars.appendChild(container);
+    }
   });
 }
 

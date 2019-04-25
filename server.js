@@ -17,12 +17,13 @@ voterRoom.on("connection",function(socket) {
     currentPoll.votes[choice]++;
     singleLock = true;
     socket.emit("single-lock");
+    console.log(currentPoll.votes,choice);
     adminRoom.emit("recalculate-votes",currentPoll);
   });
 });
 
 adminRoom.on("connection",function(socket) {
-  if ( currentPoll ) adminRoom.emit("recalculate-votes",currentPoll);
+  if ( currentPoll ) socket.emit("poll-post",currentPoll);
   socket.on("poll-post",function(obj) {
     currentPoll = obj;
     currentPoll.votes = obj.choices.map(item => 0);
