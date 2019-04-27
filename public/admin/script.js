@@ -49,6 +49,7 @@ function setupSocket() {
       text.innerText = obj.choices[i];
       choices.appendChild(text);
       var container = document.createElement("td");
+      container.style.width = Math.floor(100 / obj.choices.length) + "%";
       var div = document.createElement("div");
       div.className = "chart-column";
       div.style.height = (obj.votes[i] / totalCount) * 100 + "%";
