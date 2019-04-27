@@ -11,11 +11,9 @@ var currentPoll = null;
 app.use("/public",express.static(__dirname + "/public"));
 
 voterRoom.on("connection",function(socket) {
-  var singleLock = false;
   socket.on("vote",function(choice) {
     if ( ! choice instanceof Number ) return;
     currentPoll.votes[choice]++;
-    singleLock = true;
     socket.emit("single-lock");
     console.log(currentPoll.votes,choice);
     adminRoom.emit("recalculate-votes",currentPoll);

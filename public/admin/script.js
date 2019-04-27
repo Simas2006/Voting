@@ -56,6 +56,12 @@ function setupSocket() {
       bars.appendChild(container);
     }
   });
+  socket.on("recalculate-votes",function(obj) {
+    var bars = document.getElementById("chart-bars");
+    for ( var i = 0; i < obj.choices.length; i++ ) {
+      bars.children[i].firstChild.style.height = (obj.votes[i] / totalCount) * 100 + "%";
+    }
+  });
 }
 
 window.onload = function() {
