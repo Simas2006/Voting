@@ -1,5 +1,5 @@
 var socket;
-var totalCount = 12;
+var totalCount = 0;
 
 function addChoice() {
   var li = document.createElement("li");
@@ -61,6 +61,12 @@ function setupSocket() {
     for ( var i = 0; i < obj.choices.length; i++ ) {
       bars.children[i].firstChild.style.height = (obj.votes[i] / totalCount) * 100 + "%";
     }
+  });
+  socket.on("update-total",function(count) {
+    totalCount = count;
+    document.getElementById("total-100").innerText = `Total: ${totalCount}`;
+    document.getElementById("total-50").innerText = `Simple Majority (1/2): ${Math.ceil(totalCount * 0.5)}`;
+    document.getElementById("total-60").innerText = `Qualified Majority (3/5): ${Math.ceil(totalCount * 0.6)}`;
   });
 }
 
