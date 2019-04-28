@@ -14,6 +14,12 @@ app.use("/public",express.static(__dirname + "/public"));
 voterRoom.on("connection",function(socket) {
   totalVoters++;
   adminRoom.emit("update-total",totalVoters);
+  if ( currentPoll ) {
+    socket.emit("poll-post",{
+      "question": currentPoll.question,
+      "choices": currentPoll.choices
+    });
+  }
   socket.on("vote",function(choice) {
     if ( ! choice instanceof Number ) return;
     currentPoll.votes[choice]++;
@@ -29,8 +35,12 @@ voterRoom.on("connection",function(socket) {
 
 adminRoom.on("connection",function(socket) {
   if ( currentPoll ) {
-    socket.emit("poll-post",currentPoll);
-    adminRoom.emit("update-total",totalVoters);
+    socket.emit("poll-post",{
+      "question": currentPoll.question,
+      "choices": currentPoll.choices,
+      "votes": currentPoll.votes,
+      "setTotalCount": totalVoters
+    });
   }
   socket.on("poll-post",function(obj) {
     currentPoll = obj;

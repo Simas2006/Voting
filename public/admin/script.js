@@ -36,6 +36,7 @@ function setupSocket() {
   });
   socket.on("poll-post",function(obj) {
     document.getElementById("poll-info").innerText = `Question: ${obj.question}`;
+    if ( obj.setTotalCount ) totalCount = obj.setTotalCount;
     var choices = document.getElementById("chart-choices");
     var bars = document.getElementById("chart-bars");
     while ( choices.firstChild ) {
