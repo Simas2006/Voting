@@ -65,6 +65,9 @@ body {
   border-bottom: 3px solid gray;
 }
 .chart-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 90%;
   height: 0;
   background-color: red;

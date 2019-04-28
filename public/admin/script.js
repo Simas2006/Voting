@@ -45,6 +45,7 @@ function setupSocket() {
     while ( bars.firstChild ) {
       bars.removeChild(bars.firstChild);
     }
+    var voteCount = obj.votes.reduce((a,b) => a + b);
     for ( var i = 0; i < obj.choices.length; i++ ) {
       var text = document.createElement("td");
       text.innerText = obj.choices[i];
@@ -53,15 +54,18 @@ function setupSocket() {
       container.style.width = Math.floor(100 / obj.choices.length) + "%";
       var div = document.createElement("div");
       div.className = "chart-column";
-      div.style.height = (obj.votes[i] / totalCount) * 100 + "%";
+      div.style.height = (obj.votes[i] / voteCount) * 100 + "%";
+      div.innerText = `${obj.votes[i]}\n(${Math.round(obj.votes[i] / voteCount * 100) + "%"})`;
       container.appendChild(div);
       bars.appendChild(container);
     }
   });
   socket.on("recalculate-votes",function(obj) {
+    var voteCount = obj.votes.reduce((a,b) => a + b);
     var bars = document.getElementById("chart-bars");
     for ( var i = 0; i < obj.choices.length; i++ ) {
-      bars.children[i].firstChild.style.height = (obj.votes[i] / totalCount) * 100 + "%";
+      bars.children[i].firstChild.style.height = (obj.votes[i] / voteCount * 100) + "%";
+      bars.children[i].firstChild.innerText = `${obj.votes[i]}\n(${Math.round(obj.votes[i] / voteCount) * 100 + "%"})`;
     }
   });
   socket.on("update-total",function(count) {
