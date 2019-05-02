@@ -65,7 +65,7 @@ function setupSocket() {
     var bars = document.getElementById("chart-bars");
     for ( var i = 0; i < obj.choices.length; i++ ) {
       bars.children[i].firstChild.style.height = (obj.votes[i] / voteCount * 100) + "%";
-      bars.children[i].firstChild.innerText = `${obj.votes[i]}\n(${Math.round(obj.votes[i] / voteCount) * 100 + "%"})`;
+      bars.children[i].firstChild.innerText = `${obj.votes[i]}\n(${Math.round(obj.votes[i] / voteCount * 100) + "%"})`;
     }
   });
   socket.on("update-total",function(count) {
@@ -74,6 +74,10 @@ function setupSocket() {
     document.getElementById("total-50").innerText = `Simple Majority (1/2): ${Math.ceil(totalCount * 0.5)}`;
     document.getElementById("total-60").innerText = `Qualified Majority (3/5): ${Math.ceil(totalCount * 0.6)}`;
   });
+}
+
+function releaseVotes() {
+  socket.emit("release-votes");
 }
 
 window.onload = function() {

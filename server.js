@@ -51,6 +51,12 @@ adminRoom.on("connection",function(socket) {
     });
     adminRoom.emit("poll-post",currentPoll);
   });
+  socket.on("release-votes",function() {
+    voterRoom.emit("release-votes",{
+      "choices": currentPoll.choices,
+      "votes": currentPoll.votes
+    });
+  })
 });
 
 server.listen(PORT,function() {

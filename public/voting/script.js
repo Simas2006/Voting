@@ -1,5 +1,5 @@
 var socket;
-var tempLock = false;
+var singleLock = false;
 
 function renderItems(obj) {
   document.getElementById("question").innerText = obj.question;
@@ -13,8 +13,8 @@ function renderItems(obj) {
     button.innerText = obj.choices[i];
     button["data-index"] = i;
     button.onclick = function() {
-      if ( tempLock ) return;
-      tempLock = true;
+      if ( singleLock ) return;
+      singleLock = true;
       socket.emit("vote",parseInt(this["data-index"]));
     }
     button.style.width = width + "%";
@@ -35,6 +35,15 @@ function setupSocket() {
         buttons[i].disabled = "disabled";
       }
     },50);
+  });
+  socket.on("release-votes",function(obj) {
+    var voteCount = obj.votes.reduce((a,b) => a + b);
+    var div = document.getElementById("choices");
+    for ( var i = 0; i < obj.choices.length; i++ ) {
+      div.children[i].innerText = `${obj.choices[i]}\n\n${obj.votes[i]} votes\n(${Math.round(obj.votes[i] / voteCount * 100) + "%"})`;
+      div.children[i].disabled = "disabled";
+    }
+    singleLock = true;
   });
 }
 
