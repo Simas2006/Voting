@@ -27,7 +27,10 @@ function setupSocket() {
   socket.on("connect",function() {
     console.log("Connection successful");
   });
-  socket.on("poll-post",renderItems);
+  socket.on("poll-post",function(obj) {
+    singleLock = false;
+    renderItems(obj);
+  });
   socket.on("single-lock",function() {
     setTimeout(function() {
       var buttons = document.getElementById("choices").childNodes;
