@@ -16,12 +16,13 @@ body {
 #choices button {
   height: 100%;
   font-size: 150%;
-  background-color: #f0f0f0;
+  background-color: #72a8ff;
+  border: 5px solid #6bff8c;
   color: black;
 }
 #choices button:hover {
-  background-color: #d0d0d0;
+  background-color: #5288df;
 }
 #choices button:active {
-  background-color: #b0b0b0;
+  background-color: #3268bf;
 }
