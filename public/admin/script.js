@@ -55,7 +55,7 @@ function setupSocket() {
       var div = document.createElement("div");
       div.className = "chart-column";
       div.style.height = (obj.votes[i] / voteCount) * 100 + "%";
-      div.innerText = `${obj.votes[i]}\n(${Math.round(obj.votes[i] / voteCount * 100) + "%"})`;
+      if ( obj.votes[i] > 0 ) div.innerText = `${obj.votes[i]}\n(${Math.round(obj.votes[i] / voteCount * 100) + "%"})`;
       container.appendChild(div);
       bars.appendChild(container);
     }
@@ -65,7 +65,7 @@ function setupSocket() {
     var bars = document.getElementById("chart-bars");
     for ( var i = 0; i < obj.choices.length; i++ ) {
       bars.children[i].firstChild.style.height = (obj.votes[i] / voteCount * 100) + "%";
-      bars.children[i].firstChild.innerText = `${obj.votes[i]}\n(${Math.round(obj.votes[i] / voteCount * 100) + "%"})`;
+      if ( obj.votes[i] > 0 ) bars.children[i].firstChild.innerText = `${obj.votes[i]}\n(${Math.round(obj.votes[i] / voteCount * 100) + "%"})`;
     }
   });
   socket.on("update-total",function(count) {
@@ -78,6 +78,19 @@ function setupSocket() {
 
 function releaseVotes() {
   socket.emit("release-votes");
+}
+
+function clearPoll() {
+  socket.emit("clear-poll");
+  document.getElementById("poll-info").innerText = "Nothing posted yet";
+  var choices = document.getElementById("chart-choices");
+  var bars = document.getElementById("chart-bars");
+  while ( choices.firstChild ) {
+    choices.removeChild(choices.firstChild);
+  }
+  while ( bars.firstChild ) {
+    bars.removeChild(bars.firstChild);
+  }
 }
 
 window.onload = function() {

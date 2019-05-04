@@ -48,6 +48,13 @@ function setupSocket() {
     }
     singleLock = true;
   });
+  socket.on("clear-poll",function() {
+    document.getElementById("question").innerText = "No question posted";
+    var div = document.getElementById("choices");
+    while ( div.firstChild ) {
+      div.removeChild(div.firstChild);
+    }
+  });
 }
 
 window.onload = function() {

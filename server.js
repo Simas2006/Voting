@@ -56,6 +56,10 @@ adminRoom.on("connection",function(socket) {
       "choices": currentPoll.choices,
       "votes": currentPoll.votes
     });
+  });
+  socket.on("clear-poll",function() {
+    currentPoll = null;
+    voterRoom.emit("clear-poll");
   })
 });
 
