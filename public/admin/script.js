@@ -74,6 +74,17 @@ function setupSocket() {
     document.getElementById("total-50").innerText = `Simple Majority (1/2): ${Math.ceil(totalCount * 0.5)}`;
     document.getElementById("total-60").innerText = `Qualified Majority (3/5): ${Math.ceil(totalCount * 0.6)}`;
   });
+  socket.on("clear-poll",function() {
+    document.getElementById("poll-info").innerText = "Nothing posted yet";
+    var choices = document.getElementById("chart-choices");
+    var bars = document.getElementById("chart-bars");
+    while ( choices.firstChild ) {
+      choices.removeChild(choices.firstChild);
+    }
+    while ( bars.firstChild ) {
+      bars.removeChild(bars.firstChild);
+    }
+  });
 }
 
 function releaseVotes() {
@@ -82,15 +93,6 @@ function releaseVotes() {
 
 function clearPoll() {
   socket.emit("clear-poll");
-  document.getElementById("poll-info").innerText = "Nothing posted yet";
-  var choices = document.getElementById("chart-choices");
-  var bars = document.getElementById("chart-bars");
-  while ( choices.firstChild ) {
-    choices.removeChild(choices.firstChild);
-  }
-  while ( bars.firstChild ) {
-    bars.removeChild(bars.firstChild);
-  }
 }
 
 window.onload = function() {

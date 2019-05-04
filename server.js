@@ -60,7 +60,8 @@ adminRoom.on("connection",function(socket) {
   socket.on("clear-poll",function() {
     currentPoll = null;
     voterRoom.emit("clear-poll");
-  })
+    adminRoom.emit("clear-poll");
+  });
 });
 
 server.listen(PORT,function() {
