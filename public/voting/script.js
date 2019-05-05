@@ -1,5 +1,5 @@
 var socket;
-var singleLock = false;
+var voteLock = false;
 
 function renderItems(obj) {
   document.getElementById("question").innerText = obj.question;
@@ -14,8 +14,8 @@ function renderItems(obj) {
     button.innerText = obj.choices[i];
     button["data-index"] = i;
     button.onclick = function() {
-      if ( singleLock ) return;
-      singleLock = true;
+      if ( voteLock ) return;
+      voteLock = true;
       document.getElementById("vote-cast-text").style.display = "block";
       socket.emit("vote",parseInt(this["data-index"]));
     }
@@ -33,10 +33,10 @@ function setupSocket() {
     if ( ! valid ) alert("ono");
   });
   socket.on("poll-post",function(obj) {
-    singleLock = false;
+    voteLock = false;
     renderItems(obj);
   });
-  socket.on("single-lock",function() {
+  socket.on("vote-recorded",function() {
     setTimeout(function() {
       var buttons = document.getElementById("choices").childNodes;
       for ( var i = 0; i < buttons.length; i++ ) {
@@ -51,7 +51,7 @@ function setupSocket() {
       div.children[i].innerText = `${obj.choices[i]}\n\n${obj.votes[i]} votes\n(${Math.round(obj.votes[i] / voteCount * 100) + "%"})`;
       div.children[i].disabled = "disabled";
     }
-    singleLock = true;
+    voteLock = true;
     document.getElementById("vote-cast-text").style.display = "none";
   });
   socket.on("clear-poll",function() {
