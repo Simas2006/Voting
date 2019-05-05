@@ -9,6 +9,7 @@ var adminRoom = io.of("/admin");
 var currentPoll = null;
 var activeUIDs = [];
 var lockedUIDs = {};
+var votesReleased = false;
 
 app.use("/public",express.static(__dirname + "/public"));
 
@@ -34,6 +35,10 @@ voterRoom.on("connection",function(socket) {
       socket.emit("poll-post",{
         "question": currentPoll.question,
         "choices": currentPoll.choices
+      });
+      if ( votesReleased ) socket.emit("release-votes",{
+        "choices": currentPoll.choices,
+        "votes": currentPoll.votes
       });
     }
   });
@@ -65,6 +70,7 @@ adminRoom.on("connection",function(socket) {
     currentPoll = obj;
     currentPoll.votes = obj.choices.map(item => 0);
     setAll(false);
+    votesReleased = false;
     voterRoom.emit("poll-post",{
       "question": currentPoll.question,
       "choices": currentPoll.choices
@@ -73,6 +79,7 @@ adminRoom.on("connection",function(socket) {
   });
   socket.on("release-votes",function() {
     setAll(true);
+    votesReleased = true;
     voterRoom.emit("release-votes",{
       "choices": currentPoll.choices,
       "votes": currentPoll.votes
@@ -81,6 +88,7 @@ adminRoom.on("connection",function(socket) {
   socket.on("clear-poll",function() {
     currentPoll = null;
     setAll(false);
+    votesReleased = false;
     voterRoom.emit("clear-poll");
     adminRoom.emit("clear-poll");
   });
