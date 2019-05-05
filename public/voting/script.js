@@ -3,6 +3,7 @@ var singleLock = false;
 
 function renderItems(obj) {
   document.getElementById("question").innerText = obj.question;
+  document.getElementById("vote-cast-text").style.display = "none";
   var width = Math.floor(100 / obj.choices.length);
   var div = document.getElementById("choices");
   while ( div.firstChild ) {
@@ -15,6 +16,7 @@ function renderItems(obj) {
     button.onclick = function() {
       if ( singleLock ) return;
       singleLock = true;
+      document.getElementById("vote-cast-text").style.display = "block";
       socket.emit("vote",parseInt(this["data-index"]));
     }
     button.style.width = width + "%";
@@ -47,9 +49,11 @@ function setupSocket() {
       div.children[i].disabled = "disabled";
     }
     singleLock = true;
+    document.getElementById("vote-cast-text").style.display = "none";
   });
   socket.on("clear-poll",function() {
     document.getElementById("question").innerText = "No question posted";
+    document.getElementById("vote-cast-text").style.display = "none";
     var div = document.getElementById("choices");
     while ( div.firstChild ) {
       div.removeChild(div.firstChild);

@@ -3,14 +3,20 @@ body {
   font-family: "Arial";
   text-align: center;
 }
-#question {
+#center-text {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 20vh;
-  font-size: 150%;
+  flex-wrap: wrap;
+  flex-direction: column;
+  height: 23vh;
+}
+#question {
+  font-size: 175%;
+  margin: 0.25em;
 }
 #choices {
+  display: block;
   height: 74vh;
 }
 #choices button {
@@ -25,4 +31,11 @@ body {
 }
 #choices button:active {
   background-color: #3268bf;
+}
+#vote-cast-text {
+  display: none;
+  color: #d31b1b;
+  font-weight: bold;
+  margin: 0.25em;
+  font-size: 120%;
 }
