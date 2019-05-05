@@ -66,6 +66,6 @@ function setupSocket() {
 }
 
 window.onload = function() {
-  if ( ! localStorage.getItem("uid") ) localStorage.setItem("uid",Math.floor(Math.random() * 1e14).toString());
+  if ( ! localStorage.getItem("uid") || localStorage.getItem("bypassMultiLock") ) localStorage.setItem("uid",Math.floor(Math.random() * 1e14).toString());
   setupSocket();
 }
