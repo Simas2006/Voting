@@ -29,6 +29,9 @@ function setupSocket() {
   socket.on("connect",function() {
     console.log("Connection successful");
   });
+  socket.on("check-uid",function(valid) {
+    if ( ! valid ) alert("ono");
+  });
   socket.on("poll-post",function(obj) {
     singleLock = false;
     renderItems(obj);
@@ -59,8 +62,10 @@ function setupSocket() {
       div.removeChild(div.firstChild);
     }
   });
+  socket.emit("check-uid",localStorage.getItem("uid"));
 }
 
 window.onload = function() {
+  if ( ! localStorage.getItem("uid") ) localStorage.setItem("uid",Math.floor(Math.random() * 1e14).toString());
   setupSocket();
 }

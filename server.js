@@ -8,19 +8,31 @@ var voterRoom = io.of("/voter");
 var adminRoom = io.of("/admin");
 var currentPoll = null;
 var totalVoters = 0;
+var activeUIDs = [];
 
 app.use("/public",express.static(__dirname + "/public"));
 
 voterRoom.on("connection",function(socket) {
-  totalVoters++;
-  adminRoom.emit("update-total",totalVoters);
-  if ( currentPoll ) {
-    socket.emit("poll-post",{
-      "question": currentPoll.question,
-      "choices": currentPoll.choices
-    });
-  }
+  var uid;
+  socket.on("check-uid",function(paramuid) {
+    if ( activeUIDs.indexOf(paramuid) > -1 ) {
+      socket.emit("check-uid",false);
+      return;
+    }
+    socket.emit("check-uid",true);
+    activeUIDs.push(paramuid);
+    uid = paramuid;
+    totalVoters++;
+    adminRoom.emit("update-total",totalVoters);
+    if ( currentPoll ) {
+      socket.emit("poll-post",{
+        "question": currentPoll.question,
+        "choices": currentPoll.choices
+      });
+    }
+  });
   socket.on("vote",function(choice) {
+    if ( ! uid ) return;
     if ( ! choice instanceof Number ) return;
     currentPoll.votes[choice]++;
     socket.emit("single-lock");
@@ -28,7 +40,9 @@ voterRoom.on("connection",function(socket) {
     adminRoom.emit("recalculate-votes",currentPoll);
   });
   socket.on("disconnect",function() {
+    if ( ! uid ) return;
     totalVoters--;
+    activeUIDs = activeUIDs.filter(item => item != uid);
     adminRoom.emit("update-total",totalVoters);
   })
 });
