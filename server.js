@@ -38,10 +38,10 @@ adminRoom.on("connection",function(socket) {
     socket.emit("poll-post",{
       "question": currentPoll.question,
       "choices": currentPoll.choices,
-      "votes": currentPoll.votes,
-      "setTotalCount": totalVoters
+      "votes": currentPoll.votes
     });
   }
+  socket.emit("update-total",totalVoters);
   socket.on("poll-post",function(obj) {
     currentPoll = obj;
     currentPoll.votes = obj.choices.map(item => 0);
