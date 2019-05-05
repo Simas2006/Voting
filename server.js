@@ -7,7 +7,6 @@ var PORT = process.argv[2] || 8000;
 var voterRoom = io.of("/voter");
 var adminRoom = io.of("/admin");
 var currentPoll = null;
-var totalVoters = 0;
 var activeUIDs = [];
 var lockedUIDs = {};
 
@@ -30,8 +29,7 @@ voterRoom.on("connection",function(socket) {
     activeUIDs.push(paramuid);
     lockedUIDs[paramuid] = false;
     uid = paramuid;
-    totalVoters++;
-    adminRoom.emit("update-total",totalVoters);
+    adminRoom.emit("update-total",activeUIDs.length);
     if ( currentPoll ) {
       socket.emit("poll-post",{
         "question": currentPoll.question,
@@ -48,11 +46,9 @@ voterRoom.on("connection",function(socket) {
   });
   socket.on("disconnect",function() {
     if ( ! uid ) return;
-    totalVoters--;
     activeUIDs = activeUIDs.filter(item => item != uid);
     delete lockedUIDs[uid];
-    console.log(lockedUIDs)
-    adminRoom.emit("update-total",totalVoters);
+    adminRoom.emit("update-total",activeUIDs.length);
   })
 });
 
@@ -64,7 +60,7 @@ adminRoom.on("connection",function(socket) {
       "votes": currentPoll.votes
     });
   }
-  socket.emit("update-total",totalVoters);
+  socket.emit("update-total",activeUIDs.length);
   socket.on("poll-post",function(obj) {
     currentPoll = obj;
     currentPoll.votes = obj.choices.map(item => 0);

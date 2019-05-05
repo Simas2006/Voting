@@ -46,9 +46,10 @@ function setupSocket() {
   });
   socket.on("release-votes",function(obj) {
     var voteCount = obj.votes.reduce((a,b) => a + b);
+    var max = obj.votes.reduce((a,b) => Math.max(a,b));
     var div = document.getElementById("choices");
     for ( var i = 0; i < obj.choices.length; i++ ) {
-      div.children[i].innerText = `${obj.choices[i]}\n\n${obj.votes[i]} votes\n(${Math.round(obj.votes[i] / voteCount * 100) + "%"})`;
+      div.children[i].innerText = `${obj.choices[i]}\n\n${obj.votes[i]} vote${obj.votes[i] != 1 ? "s" : ""}\n(${Math.round(obj.votes[i] / voteCount * 100) + "%"})`;
       div.children[i].disabled = "disabled";
     }
     voteLock = true;
