@@ -30,7 +30,11 @@ function setupSocket() {
     console.log("Connection successful");
   });
   socket.on("check-uid",function(valid) {
-    if ( ! valid ) alert("ono");
+    if ( ! valid ) {
+      socket.disconnect();
+      alert("Using more than one voting window is not allowed.\nIf you need to use this window, please close the other open window and reload this page.");
+      document.getElementById("question").innerText = "";
+    }
   });
   socket.on("poll-post",function(obj) {
     voteLock = false;
