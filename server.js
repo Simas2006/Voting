@@ -13,6 +13,10 @@ var votesReleased = false;
 
 app.use("/public",express.static(__dirname + "/public"));
 
+app.get("/",function(req,res) {
+  res.redirect("/public/voting");
+});
+
 function setAll(state) {
   for ( var i = 0; i < activeUIDs.length; i++ ) {
     lockedUIDs[activeUIDs[i]] = state;
