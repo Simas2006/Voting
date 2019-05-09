@@ -95,6 +95,10 @@ function clearPoll() {
 }
 
 window.onload = function() {
+  if ( ! localStorage.getItem("allowAdmin") ) {
+    alert("Using the admin page without permission is not allowed.");
+    return;
+  }
   setupSocket();
   addChoice();
   addChoice();
