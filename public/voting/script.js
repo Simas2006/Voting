@@ -37,8 +37,15 @@ function setupSocket() {
     }
   });
   socket.on("poll-post",function(obj) {
-    voteLock = false;
+    voteLock = obj.setLock || false;
     renderItems(obj);
+    if ( obj.setLock ) {
+      document.getElementById("vote-cast-text").style.display = "block";
+      var buttons = document.getElementById("choices").childNodes;
+      for ( var i = 0; i < buttons.length; i++ ) {
+        buttons[i].disabled = "disabled";
+      }
+    }
   });
   socket.on("vote-recorded",function() {
     setTimeout(function() {

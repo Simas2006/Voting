@@ -21,6 +21,10 @@ function setAll(state) {
   for ( var i = 0; i < activeUIDs.length; i++ ) {
     lockedUIDs[activeUIDs[i]] = state;
   }
+  var keys = Object.keys(lockedUIDs);
+  for ( var i = 0; i < keys.length; i++ ) {
+    if ( activeUIDs.indexOf(keys[i]) <= -1 ) delete lockedUIDs[keys[i]];
+  }
 }
 
 voterRoom.on("connection",function(socket) {
@@ -32,13 +36,14 @@ voterRoom.on("connection",function(socket) {
     }
     socket.emit("check-uid",true);
     activeUIDs.push(paramuid);
-    lockedUIDs[paramuid] = false;
+    if ( ! lockedUIDs[paramuid] ) lockedUIDs[paramuid] = false;
     uid = paramuid;
     adminRoom.emit("update-total",activeUIDs.length);
     if ( currentPoll ) {
       socket.emit("poll-post",{
         "question": currentPoll.question,
-        "choices": currentPoll.choices
+        "choices": currentPoll.choices,
+        "setLock": lockedUIDs[uid]
       });
       if ( votesReleased ) socket.emit("release-votes",{
         "choices": currentPoll.choices,
@@ -49,6 +54,7 @@ voterRoom.on("connection",function(socket) {
   socket.on("vote",function(choice) {
     if ( ! uid || lockedUIDs[uid] ) return;
     lockedUIDs[uid] = true;
+    console.log(lockedUIDs,uid)
     currentPoll.votes[choice]++;
     socket.emit("vote-recorded");
     adminRoom.emit("recalculate-votes",currentPoll);
@@ -56,9 +62,8 @@ voterRoom.on("connection",function(socket) {
   socket.on("disconnect",function() {
     if ( ! uid ) return;
     activeUIDs = activeUIDs.filter(item => item != uid);
-    delete lockedUIDs[uid];
     adminRoom.emit("update-total",activeUIDs.length);
-  })
+  });
 });
 
 adminRoom.on("connection",function(socket) {
